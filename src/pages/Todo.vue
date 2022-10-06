@@ -1,10 +1,10 @@
 <template>
   <q-page class="bg-grey-3 column">
     <div class="row q-pa-sm bg-primary">
-      <q-input class="col" square filled bg-color="white" v-model="newTask" label="Add Task" dense>
-      <template>
-        <q-btn round :dense="dense" fl at icon="add"/>
-      </template>
+      <q-input v-model="newTask" @keyup.enter="addTask" class="col" square filled bg-color="white" placeholder="Add Task" dense>
+        <template v-slot:append>
+          <q-icon @click="addTask" round dense flat name="add"/>
+        </template>
       </q-input>
     </div>
     <q-list class="bg-white" separator bordered>
@@ -38,6 +38,12 @@
         </q-item-section>
       </q-item>
     </q-list>
+    <div v-if="!tasks.length" class="no-tasks absolute-center">
+      <q-icon name="check" size="100px" color="primary" />
+      <div class="text-h5 text-primary text-center" color="primary">
+        No Tasks
+      </div>
+    </div>
   </q-page>
 </template>
 
@@ -46,19 +52,20 @@
 export default {
   data () {
     return {
+      newTask: '',
       tasks: [
-        {
-          title: 'Get a life',
-          done: false
-        },
-        {
-          title: 'Live that life',
-          done: false
-        },
-        {
-          title: 'Die',
-          done: false
-        }
+        // {
+        //   title: 'Get a life',
+        //   done: false
+        // },
+        // {
+        //   title: 'Live that life',
+        //   done: false
+        // },
+        // {
+        //   title: 'Die',
+        //   done: false
+        // }
       ]
     }
   },
@@ -75,6 +82,13 @@ export default {
           this.tasks.splice(index, 1)
           this.$q.notify('Task deleted')
         })
+    },
+    addTask() {
+      this.tasks.push({
+        title: this.newTask,
+        done: false
+      })
+      this.newTask = ''
     }
   }
 }
